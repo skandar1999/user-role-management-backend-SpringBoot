@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.skandar.gestion.entities.Role;
 import com.skandar.gestion.service.RoleService;
+import com.skandar.gestion.service.HistoriqueActionService;
 
 @RestController
 @RequestMapping("/api/roles")
@@ -15,6 +16,9 @@ public class RoleRESTController {
 
     @Autowired
     RoleService roleService;
+
+    @Autowired
+    HistoriqueActionService historiqueActionService;
 
     @GetMapping
     public List<Role> getAllRoles() {
@@ -28,24 +32,27 @@ public class RoleRESTController {
 
     @PostMapping
     public Role createRole(@RequestBody Role role) {
-        return roleService.saveRole(role);
+        Role createdRole = roleService.saveRole(role);
+        historiqueActionService.saveAction("Created role: " + createdRole.getNom(), 1L);
+        return createdRole;
     }
 
     @PutMapping("/{id}")
     public Role updateRole(@PathVariable("id") Long id, @RequestBody Role role) {
         role.setId(id);
-        return roleService.updateRole(role);
+        Role updatedRole = roleService.updateRole(role);
+        historiqueActionService.saveAction("Updated role id: " + id, 1L);
+        return updatedRole;
     }
 
     @DeleteMapping("/{id}")
     public void deleteRole(@PathVariable("id") Long id) {
         roleService.deleteRoleById(id);
-    }
-    
-    
-    @GetMapping("/search/{nom}")
-    public List<Role> searchRoleByName(@PathVariable("nom") String nom){
-        return roleService.findByNomRoleContains(nom);
+        historiqueActionService.saveAction("Deleted role id: " + id, 1L);
     }
 
+    @GetMapping("/search/{nom}")
+    public List<Role> searchRoleByName(@PathVariable("nom") String nom) {
+        return roleService.findByNomRoleContains(nom);
+    }
 }

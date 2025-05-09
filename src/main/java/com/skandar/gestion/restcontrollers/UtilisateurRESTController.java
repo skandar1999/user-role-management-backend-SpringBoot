@@ -1,12 +1,12 @@
 package com.skandar.gestion.restcontrollers;
 
-import java.util.List;
-
+import com.skandar.gestion.entities.Utilisateur;
+import com.skandar.gestion.service.UtilisateurService;
+import com.skandar.gestion.service.HistoriqueActionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.skandar.gestion.entities.Utilisateur;
-import com.skandar.gestion.service.UtilisateurService;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/utilisateurs")
@@ -14,7 +14,10 @@ import com.skandar.gestion.service.UtilisateurService;
 public class UtilisateurRESTController {
 
     @Autowired
-    UtilisateurService utilisateurService;
+    private UtilisateurService utilisateurService;
+
+    @Autowired
+    private HistoriqueActionService historiqueActionService;
 
     @GetMapping
     public List<Utilisateur> getAllUtilisateurs() {
@@ -28,17 +31,32 @@ public class UtilisateurRESTController {
 
     @PostMapping("/save")
     public Utilisateur createUtilisateur(@RequestBody Utilisateur utilisateur) {
-        return utilisateurService.saveUtilisateur(utilisateur);
+        Utilisateur newUtilisateur = utilisateurService.saveUtilisateur(utilisateur);
+        // Log the creation action
+        historiqueActionService.saveAction("Création de l'utilisateur avec ID " + newUtilisateur.getId(), newUtilisateur.getId());
+        return newUtilisateur;
     }
 
     @PutMapping("/update/{id}")
     public Utilisateur updateUtilisateur(@PathVariable("id") Long id, @RequestBody Utilisateur utilisateur) {
         utilisateur.setId(id);
-        return utilisateurService.updateUtilisateur(utilisateur);
+        Utilisateur updatedUtilisateur = utilisateurService.updateUtilisateur(utilisateur);
+        // Log the update action
+        historiqueActionService.saveAction("Mise à jour de l'utilisateur avec ID " + updatedUtilisateur.getId(), updatedUtilisateur.getId());
+        return updatedUtilisateur;
     }
 
     @DeleteMapping("/delete/{id}")
     public void deleteUtilisateur(@PathVariable("id") Long id) {
-        utilisateurService.deleteUtilisateurById(id);
+        Utilisateur utilisateur = utilisateurService.getUtilisateurById(id);  // get user first
+
+        utilisateurService.deleteUtilisateurById(id);  // delete user
+        historiqueActionService.saveAction("Suppression de l'utilisateur avec ID " + utilisateur.getId(), utilisateur.getId());
+    }
+
+
+    @GetMapping("/users/search/{nom}")
+    public List<Utilisateur> searchUserByName(@PathVariable("nom") String nom) {
+        return utilisateurService.findByNomContains(nom);
     }
 }

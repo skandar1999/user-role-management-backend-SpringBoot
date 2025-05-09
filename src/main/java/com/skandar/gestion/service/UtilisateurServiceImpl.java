@@ -48,4 +48,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public List<Utilisateur> findByNomContains(String nom) {
         return utilisateurRepository.findByNomContains(nom);
     }
+
+	
+	
+	
 }

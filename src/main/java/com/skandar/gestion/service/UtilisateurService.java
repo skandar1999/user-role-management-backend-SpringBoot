@@ -2,6 +2,8 @@ package com.skandar.gestion.service;
 
 
 import java.util.List;
+
+import com.skandar.gestion.entities.Role;
 import com.skandar.gestion.entities.Utilisateur;
 
 public interface UtilisateurService {
@@ -13,4 +15,5 @@ public interface UtilisateurService {
     Utilisateur getUtilisateurById(Long id);
     List<Utilisateur> getAllUtilisateurs();
     List<Utilisateur> findByNomContains(String nom);
+
 }
