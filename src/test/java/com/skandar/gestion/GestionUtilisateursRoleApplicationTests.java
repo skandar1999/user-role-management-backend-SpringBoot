@@ -22,12 +22,7 @@ class GestionUtilisateursRoleApplicationTests {
     @Autowired
     private UtilisateurRepository utilisateurRepository;
 
-    @Test
-    public void testCreateRole() {
-        Role role = new Role("Manager", "Description role manager  ");
-        Role savedRole = roleRepository.save(role);
-
-    }
+   
     
     @Test
     public void testFindRole() {

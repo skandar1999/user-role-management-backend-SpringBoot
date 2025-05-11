@@ -1,37 +1,26 @@
 package com.skandar.gestion.service;
 
-import java.util.List;
-
+import com.skandar.gestion.entities.Permission;
+import com.skandar.gestion.entities.Role;
+import com.skandar.gestion.entities.Utilisateur;
+import com.skandar.gestion.repos.PermissionRepository;
+import com.skandar.gestion.repos.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.skandar.gestion.entities.Role;
-import com.skandar.gestion.repos.RoleRepository;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class RoleServiceImpl implements RoleService {
-
-    @Autowired
+	
+	@Autowired
     private RoleRepository roleRepository;
 
     @Override
-    public Role saveRole(Role r) {
-        return roleRepository.save(r);
-    }
-
-    @Override
-    public Role updateRole(Role r) {
-        return roleRepository.save(r);
-    }
-
-    @Override
-    public void deleteRole(Role r) {
-        roleRepository.delete(r);
-    }
-
-    @Override
-    public void deleteRoleById(Long id) {
-        roleRepository.deleteById(id);
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
     }
 
     @Override
@@ -40,22 +29,22 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<Role> getAllRoles() {
-        return roleRepository.findAll();
+    public Role save(Role role) {
+        return roleRepository.save(role);
     }
 
     @Override
-    public List<Role> findByNomRole(String nom) {
-        return roleRepository.findByNom(nom);  
+    public Role updateRole(Role role) {
+        return roleRepository.save(role);
     }
 
     @Override
-    public List<Role> findByNomRoleContains(String nom) {
-        return roleRepository.findByNomContaining(nom); 
+    public void deleteRoleById(Long id) {
+        roleRepository.deleteById(id);
     }
 
     @Override
-    public List<Role> findByDescriptionRole(String description) {
-        return roleRepository.findByDescriptionContaining(description); 
+    public List<Role> findByNomContaining(String nom) {
+        return roleRepository.findByNomContaining(nom);
     }
-}
+	}
