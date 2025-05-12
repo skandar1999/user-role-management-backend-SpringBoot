@@ -67,9 +67,9 @@ class GestionUtilisateursRoleApplicationTests {
 
         Utilisateur user = new Utilisateur();
         user.setNom("sabri");
-        user.setEmail("sabri@gmail.com");
+        user.setEmail("sabriItbs@gmail.com");
         user.setMotDePasse("123456789");
-        user.setRole(role); // Affectation correcte
+        user.setRole(role); 
         user.setActif(true);
 
         Utilisateur savedUser = utilisateurRepository.save(user);
